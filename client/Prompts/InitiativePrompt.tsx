@@ -45,6 +45,10 @@ function InitiativeSide(props: {
 }) {
   const { setValues, values } = useFormikContext<InitiativeModel>();
   const [rerolledType, setRerolledType] = React.useState<null | string>(null);
+  const isHexagon = props.sideLabel === "PC";
+  const variantClassName = isHexagon
+    ? " roll-initiative__mode-button--hexagon"
+    : "";
   return (
     <div className="roll-initiative__side">
       <ul className={props.sideClassName}>
@@ -60,7 +64,9 @@ function InitiativeSide(props: {
       ) : (
         <div className="roll-initiative__buttons">
           <Button
-            fontAwesomeIcon="star"
+            additionalClassNames={`roll-initiative__mode-button roll-initiative__mode-button--advantage${variantClassName}`}
+            fontAwesomeIcon={isHexagon ? undefined : "dice-d20"}
+            text="A"
             tooltip={`Reroll ${props.sideLabel} initiative with advantage`}
             onClick={() => {
               rerollInitiative(
@@ -73,7 +79,9 @@ function InitiativeSide(props: {
             }}
           />
           <Button
-            fontAwesomeIcon="exclamation-triangle"
+            additionalClassNames={`roll-initiative__mode-button roll-initiative__mode-button--disadvantage${variantClassName}`}
+            fontAwesomeIcon={isHexagon ? undefined : "dice-d20"}
+            text="D"
             tooltip={`Reroll ${props.sideLabel} initiative with disadvantage`}
             onClick={() => {
               rerollInitiative(
