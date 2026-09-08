@@ -76,7 +76,7 @@
     "browser-filesaver": "^1.1.1",
     "color": "^3.2.1",
     "connect-redis": "^7.1.0",
-    "express": "^4.22.1",
+    "express": "^5.2.1",
     "express-session": "^1.18.2",
     "ioredis": "^5.3.2",
     "knockout": "^3.5.1",
