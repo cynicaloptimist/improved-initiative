@@ -45,7 +45,7 @@ describe("AutoRerollInitiativeOption", () => {
       }
     });
     const promptReroll = jest.fn();
-    Math.random = () => 1;
+    Math.random = () => 0.999999;
     const encounter = runEncounter(promptReroll);
     expect(encounter.Combatants()[0].Initiative()).toEqual(20);
     expect(encounter.Combatants()[1].Initiative()).toEqual(20);

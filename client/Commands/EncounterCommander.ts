@@ -12,7 +12,7 @@ import { CombatStatsPrompt } from "../Prompts/CombatStatsPrompt";
 import { InitiativePrompt } from "../Prompts/InitiativePrompt";
 import { PlayerViewPrompt } from "../Prompts/PlayerViewPrompt";
 import { QuickAddPrompt } from "../Prompts/QuickAddPrompt";
-import { RollDicePrompt } from "../Prompts/RollDicePrompt";
+import { RollDicePrompt } from "../Prompts/dice/RollDicePrompt";
 import { ToggleFullscreen } from "./ToggleFullscreen";
 import { PersistentCharacter } from "../../common/PersistentCharacter";
 

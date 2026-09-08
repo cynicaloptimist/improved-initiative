@@ -1,5 +1,6 @@
 import * as _ from "lodash";
 import { InitiativeSpecialRoll } from "../../common/StatBlock";
+import { rollDie } from "./Dice";
 
 export type AbilityCheckResult = {
   rolls: number[];
@@ -35,7 +36,7 @@ export class DefaultRules implements IRules {
 
   public AbilityCheck = (mod = 0, specialRoll?: InitiativeSpecialRoll) => {
     if (specialRoll == "advantage") {
-      const rolls = [rollD20(), rollD20()];
+      const rolls = [rollDie(20), rollDie(20)];
       return {
         rolls,
         finalValue: _.max(rolls) + mod
@@ -43,7 +44,7 @@ export class DefaultRules implements IRules {
     }
 
     if (specialRoll == "disadvantage") {
-      const rolls = [rollD20(), rollD20()];
+      const rolls = [rollDie(20), rollDie(20)];
       return {
         rolls,
         finalValue: _.min(rolls) + mod
@@ -57,7 +58,7 @@ export class DefaultRules implements IRules {
       };
     }
 
-    const roll = rollD20();
+    const roll = rollDie(20);
     return {
       rolls: [roll],
       finalValue: roll + mod
@@ -65,8 +66,4 @@ export class DefaultRules implements IRules {
   };
 
   public EnemyHPTransparency = "whenBloodied";
-}
-
-function rollD20(): number {
-  return Math.ceil(Math.random() * 20);
 }
