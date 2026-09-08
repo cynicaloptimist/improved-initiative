@@ -101,9 +101,9 @@ describe("CombatantCommander", () => {
   test("rerolls the original dice expression", () => {
     const random = jest
       .spyOn(Math, "random")
-      .mockReturnValueOnce(0.01)
+      .mockReturnValueOnce(0)
       .mockReturnValueOnce(0.2)
-      .mockReturnValue(1);
+      .mockReturnValue(0.999999);
 
     try {
       combatantCommander.RollDice("2d6 + 3");

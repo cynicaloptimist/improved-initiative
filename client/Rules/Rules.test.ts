@@ -7,6 +7,10 @@ describe("DefaultRules", () => {
     rules = new DefaultRules();
   });
 
+  afterEach(() => {
+    jest.restoreAllMocks();
+  });
+
   test("Ability Score 0", () => {
     expect(rules.GetModifierFromScore(0)).toBe(-5);
   });
@@ -20,29 +24,35 @@ describe("DefaultRules", () => {
   });
 
   test("Roll with advantage", () => {
-    Math.random = jest
-      .fn()
-      .mockReturnValueOnce(5 / 20)
-      .mockReturnValueOnce(15 / 20);
+    jest
+      .spyOn(Math, "random")
+      .mockReturnValueOnce(4 / 20)
+      .mockReturnValueOnce(14 / 20);
     const roll = rules.AbilityCheck(0, "advantage");
     expect(roll).toEqual({ rolls: [5, 15], finalValue: 15 });
   });
 
   test("Roll with disadvantage", () => {
-    Math.random = jest
-      .fn()
-      .mockReturnValueOnce(5 / 20)
-      .mockReturnValueOnce(15 / 20);
+    jest
+      .spyOn(Math, "random")
+      .mockReturnValueOnce(4 / 20)
+      .mockReturnValueOnce(14 / 20);
     const roll = rules.AbilityCheck(0, "disadvantage");
     expect(roll).toEqual({ rolls: [5, 15], finalValue: 5 });
   });
 
   test("Roll with take ten", () => {
-    Math.random = jest
-      .fn()
-      .mockReturnValueOnce(5 / 20)
-      .mockReturnValueOnce(15 / 20);
+    jest.spyOn(Math, "random");
     const roll = rules.AbilityCheck(0, "take-ten");
     expect(roll).toEqual({ rolls: [], finalValue: 10 });
+    expect(Math.random).not.toHaveBeenCalled();
+  });
+
+  test("Roll the minimum d20 value when Math.random returns zero", () => {
+    jest.spyOn(Math, "random").mockReturnValue(0);
+
+    const roll = rules.AbilityCheck();
+
+    expect(roll).toEqual({ rolls: [1], finalValue: 1 });
   });
 });
