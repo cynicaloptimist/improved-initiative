@@ -44,17 +44,7 @@ describe("InitiativePrompt", () => {
     expect(playerButtons.map(button => button.textContent)).toEqual(["A", "D"]);
     expect(enemyButtons.map(button => button.textContent)).toEqual(["A", "D"]);
     expect(
-      playerButtons.every(button =>
-        button.classList.contains("roll-initiative__mode-button--hexagon")
-      )
-    ).toBe(true);
-    expect(
-      playerButtons.every(
-        button => button.querySelector(".fa-dice-d20") === null
-      )
-    ).toBe(true);
-    expect(
-      enemyButtons.every(
+      [...playerButtons, ...enemyButtons].every(
         button => button.querySelector(".fa-dice-d20") !== null
       )
     ).toBe(true);

@@ -46,10 +46,6 @@ export const RollResultComponent = ({
   if (roll.Mode === RollModes.Advantage) {
     resultClassNames.push("p-roll-dice-result--advantage");
   }
-  const actionClassNames = ["p-roll-dice-result__actions"];
-  // if (roll.CanSelectMode()) {
-  // actionClassNames.push("p-roll-dice-result__actions--comparison");
-  // }
 
   return (
     <div className={resultClassNames.join(" ")}>
@@ -77,11 +73,11 @@ export const RollResultComponent = ({
           </span>
         </span>
       </div>
-      <div className={actionClassNames.join(" ")}>
+      <div className="p-roll-dice-result__actions">
         {roll.CanSelectMode() && (
           <>
             <Button
-              additionalClassNames="p-roll-dice-result__mode-d20-background p-roll-dice-result__mode-d20-background-letter p-roll-dice-result__mode-advantage"
+              additionalClassNames="c-roll-mode-button c-roll-mode-button--advantage"
               ariaLabel="Add advantage"
               fontAwesomeIcon="dice-d20"
               onClick={() => updateRoll(roll.WithMode(RollModes.Advantage))}
@@ -89,89 +85,13 @@ export const RollResultComponent = ({
               tooltip="Add advantage"
             />
             <Button
-              additionalClassNames="p-roll-dice-result__mode-d20-background p-roll-dice-result__mode-d20-background-letter p-roll-dice-result__mode-disadvantage"
+              additionalClassNames="c-roll-mode-button c-roll-mode-button--disadvantage"
               ariaLabel="Add disadvantage"
               fontAwesomeIcon="dice-d20"
               onClick={() => updateRoll(roll.WithMode(RollModes.Disadvantage))}
               text="D"
               tooltip="Add disadvantage"
             />
-            {/*<Button
-              additionalClassNames="p-roll-dice-result__mode-d20-background p-roll-dice-result__mode-d20-background-letter"
-              ariaLabel="Roll with advantage — neutral d20 background"
-              fontAwesomeIcon="dice-d20"
-              onClick={() => selectMode("advantage")}
-              text="A"
-              tooltip="Add advantage — neutral d20 background"
-            />
-            <Button
-              additionalClassNames="p-roll-dice-result__mode-d20-background p-roll-dice-result__mode-d20-background-letter"
-              ariaLabel="Roll with disadvantage — neutral d20 background"
-              fontAwesomeIcon="dice-d20"
-              onClick={() => selectMode("disadvantage")}
-              text="D"
-              tooltip="Add disadvantage — neutral d20 background"
-            />
-            <Button
-              additionalClassNames="p-roll-dice-result__mode-d20-background p-roll-dice-result__mode-d20-background-abbreviation p-roll-dice-result__mode-advantage"
-              ariaLabel="Roll with advantage — d20 abbreviation"
-              fontAwesomeIcon="dice-d20"
-              onClick={() => selectMode("advantage")}
-              text="ADV"
-              tooltip="Add advantage — d20 abbreviation"
-            />
-            <Button
-              additionalClassNames="p-roll-dice-result__mode-d20-background p-roll-dice-result__mode-d20-background-abbreviation p-roll-dice-result__mode-disadvantage"
-              ariaLabel="Roll with disadvantage — d20 abbreviation"
-              fontAwesomeIcon="dice-d20"
-              onClick={() => selectMode("disadvantage")}
-              text="DIS"
-              tooltip="Add disadvantage — d20 abbreviation"
-            />
-            <Button
-              additionalClassNames="p-roll-dice-result__mode-d20-background p-roll-dice-result__mode-advantage"
-              ariaLabel="Roll with advantage — d20 plus"
-              fontAwesomeIcon="dice-d20"
-              onClick={() => selectMode("advantage")}
-              text="+"
-              tooltip="Add advantage — d20 plus"
-            />
-            <Button
-              additionalClassNames="p-roll-dice-result__mode-d20-background p-roll-dice-result__mode-disadvantage"
-              ariaLabel="Roll with disadvantage — d20 minus"
-              fontAwesomeIcon="dice-d20"
-              onClick={() => selectMode("disadvantage")}
-              text="−"
-              tooltip="Add disadvantage — d20 minus"
-            />
-            <Button
-              additionalClassNames="p-roll-dice-result__mode-hexagon p-roll-dice-result__mode-hexagon-advantage"
-              ariaLabel="Roll with advantage — hexagon plus"
-              fontAwesomeIcon="plus"
-              onClick={() => selectMode("advantage")}
-              tooltip="Add advantage — hexagon plus"
-            />
-            <Button
-              additionalClassNames="p-roll-dice-result__mode-hexagon p-roll-dice-result__mode-hexagon-disadvantage"
-              ariaLabel="Roll with disadvantage — hexagon minus"
-              fontAwesomeIcon="minus"
-              onClick={() => selectMode("disadvantage")}
-              tooltip="Add disadvantage — hexagon minus"
-            />
-            <Button
-              additionalClassNames="p-roll-dice-result__mode-hexagon p-roll-dice-result__mode-hexagon-advantage"
-              ariaLabel="Roll with advantage — hexagon letter"
-              onClick={() => selectMode("advantage")}
-              text="A"
-              tooltip="Add advantage — hexagon letter"
-            />
-            <Button
-              additionalClassNames="p-roll-dice-result__mode-hexagon p-roll-dice-result__mode-hexagon-disadvantage"
-              ariaLabel="Roll with disadvantage — hexagon letter"
-              onClick={() => selectMode("disadvantage")}
-              text="D"
-              tooltip="Add disadvantage — hexagon letter"
-            />*/}
           </>
         )}
         <Button
