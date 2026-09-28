@@ -153,15 +153,14 @@ describe("Socket.IO sessions", () => {
   }
 
   async function destroyStoredSessions(): Promise<void> {
-    const sessions = await new Promise<Record<string, Express.SessionData>>(
+    type StoredSessions = Record<string, expressSession.SessionData>;
+    const sessions = await new Promise<StoredSessions>(
       (resolve, reject) =>
         sessionStore.all((error, storedSessions) => {
           if (error) {
             reject(error);
           } else {
-            resolve(
-              (storedSessions || {}) as Record<string, Express.SessionData>
-            );
+            resolve((storedSessions || {}) as StoredSessions);
           }
         })
     );

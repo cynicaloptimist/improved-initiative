@@ -21,6 +21,7 @@ import { fetchRemoteText } from "./fetchRemoteText";
 
 type Req = Express.Request & express.Request & { rawBody: string };
 type Res = Express.Response & express.Response;
+type Session = Express.Request["session"];
 
 const tiersWithAccountSyncEntitled = [
   "1322253", // deprecated: "Improved Initiative"
@@ -210,7 +211,7 @@ function getUserAccountLevel(
 }
 
 export function updateSessionAccountFeatures(
-  session: Express.Session,
+  session: Session,
   standing: AccountStatus
 ): void {
   session.hasStorage =

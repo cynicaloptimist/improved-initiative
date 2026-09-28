@@ -1,6 +1,6 @@
 # Dependency Security Upgrade Plan
 
-Last reviewed: 2026-09-03
+Last reviewed: 2026-09-08
 
 ## Current state
 
@@ -11,6 +11,10 @@ reduced that to 32 vulnerabilities: 0 critical, 13 high, 16 moderate, and
 in-memory MongoDB path reduced that further to 27 vulnerabilities: 0 critical,
 13 high, 14 moderate, and 0 low. The production-only audit reports no
 vulnerabilities.
+
+Upgrading Express and its type definitions reduced the full development audit
+to 17 vulnerabilities: 0 critical, 16 high, 1 moderate, and 0 low. The
+production-only audit continues to report no vulnerabilities.
 
 The remaining findings need dependency replacement, major-version upgrades, or
 changes to legacy build and test infrastructure. Do not use
@@ -101,6 +105,30 @@ tests. The full Jest suite and production build also pass. Production continues
 to use its explicit `DB_CONNECTION_STRING`; the in-memory fallback remains a
 runtime dependency because it is imported by the server when that setting is
 absent.
+
+## Completed: upgrade Express 5
+
+Express has been upgraded from 4.22 to 5.2 with matching Express and session
+type definitions. Express 5's named-wildcard route syntax replaced the former
+`/:id*` account-storage routes. The new wildcard value is an array of path
+segments, so the route joins those segments to preserve the legacy behavior for
+slash-containing entity IDs. Focused HTTP tests cover both loading and deleting
+those IDs.
+
+The session declarations now augment `express-session`'s `SessionData` rather
+than the removed global Express 4 session interfaces. Regular named route
+parameters remain strings at runtime and are narrowed at their existing route
+boundaries.
+
+The server TypeScript build, production build, and all 49 Jest suites pass (256
+tests passed and 2 remain marked todo). All four Playwright scenarios reported
+passing, including Player View reconnect and encounter autosave. On Windows,
+the Playwright process remained alive after reporting the results and was
+manually stopped; no test server listener remained.
+
+Manual follow-up should exercise Patreon login/logout; account sync create,
+load, and delete; encounter import and launch redirects; and a normal Player
+View session. Redis-backed sockets remain part of deployment-level validation.
 
 ## Completed: reduce build warnings and cache production builds
 
