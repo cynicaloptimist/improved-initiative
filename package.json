@@ -42,7 +42,7 @@
     "eslint": "^8.49.0",
     "eslint-plugin-jest": "^27.4.0",
     "formik": "^2.4.5",
-    "grunt": "^1.6.1",
+    "grunt": "^1.6.3",
     "grunt-cli": "^1.4.3",
     "grunt-contrib-less": "^2.1.0",
     "grunt-contrib-watch": "^1.1.0",
