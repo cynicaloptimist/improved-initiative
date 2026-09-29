@@ -93,7 +93,7 @@ describe("User Accounts", () => {
     );
     await DB.setGoogleAnalyticsClientId(user!._id, "123456.789012");
 
-    expect(await DB.clearGoogleAnalyticsClientId(user!._id)).toBe(1);
+    expect(await DB.clearGoogleAnalyticsClientId(user!._id)).toBe(true);
     expect(
       (await DB.getUserByPatreonId(user!.patreonId))?.googleAnalyticsClientId
     ).toBeUndefined();
