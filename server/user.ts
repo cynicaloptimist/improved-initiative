@@ -7,12 +7,28 @@ export interface User {
   accountStatus: AccountStatus;
   emailAddress: string;
   googleAnalyticsClientId?: string;
+  patreonConversionTracking?: PatreonConversionTracking;
   settings: any;
   statblocks: { [id: string]: any };
   playercharacters?: { [id: string]: any };
   spells: { [id: string]: any };
   encounters: { [id: string]: any };
   persistentcharacters?: { [id: string]: any };
+}
+
+export interface PatreonConversionTracking {
+  webhookAccountStatus?: AccountStatus;
+  pendingConversion?: PendingPatreonConversion;
+  lastSentConversionId?: string;
+}
+
+export interface PendingPatreonConversion {
+  id: string;
+  previousAccountStatus: AccountStatus;
+  accountStatus: AccountStatus;
+  observedAtMs: number;
+  webhookEvent: string;
+  sendingAtMs?: number;
 }
 
 export enum AccountStatus {

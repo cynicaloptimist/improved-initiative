@@ -74,6 +74,7 @@ export function PrivacyPolicyPrompt(): PromptProps<{ optIn: boolean }> {
           "AllowTracking",
           false
         );
+        Metrics.SyncGoogleAnalyticsConsent();
       }
       return true;
     }

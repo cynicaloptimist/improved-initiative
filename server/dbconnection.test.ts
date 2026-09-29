@@ -1,20 +1,25 @@
 import { ObjectId } from "mongodb";
 import { MongoMemoryServer } from "mongodb-memory-server";
+import axios from "axios";
 import { PersistentCharacter } from "../common/PersistentCharacter";
 import { StatBlock } from "../common/StatBlock";
 import { probablyUniqueString } from "../common/Toolbox";
 import * as DB from "./dbconnection";
 import {
   getPatreonAccountStatusChange,
+  getPreviousPatreonWebhookAccountStatus,
   getPatreonWebhookAccountStatus,
   handleCurrentUser
 } from "./patreon";
-import { AccountStatus } from "./user";
+import { flushPendingPatreonConversion } from "./metrics";
+import { AccountStatus, PendingPatreonConversion } from "./user";
 
 describe("User Accounts", () => {
   let mongod: MongoMemoryServer;
   let uri;
   let userId: ObjectId;
+  const googleAnalyticsId = process.env.GOOGLE_ANALYTICS_ID;
+  const googleAnalyticsApiSecret = process.env.GOOGLE_ANALYTICS_API_SECRET;
 
   beforeAll(async () => {
     mongod = await MongoMemoryServer.create();
@@ -33,6 +38,12 @@ describe("User Accounts", () => {
 
   afterEach(async () => {
     await DB.close();
+    jest.restoreAllMocks();
+    restoreEnvironmentVariable("GOOGLE_ANALYTICS_ID", googleAnalyticsId);
+    restoreEnvironmentVariable(
+      "GOOGLE_ANALYTICS_API_SECRET",
+      googleAnalyticsApiSecret
+    );
   });
 
   afterAll(async () => {
@@ -72,6 +83,191 @@ describe("User Accounts", () => {
 
     const updatedUser = await DB.getUserByPatreonId(patreonId);
     expect(updatedUser?.googleAnalyticsClientId).toEqual("123456.789012");
+  });
+
+  test("Should clear Google Analytics client id for user", async () => {
+    const user = await DB.upsertUser(
+      probablyUniqueString(),
+      AccountStatus.Pledge,
+      ""
+    );
+    await DB.setGoogleAnalyticsClientId(user!._id, "123456.789012");
+
+    expect(await DB.clearGoogleAnalyticsClientId(user!._id)).toBe(1);
+    expect(
+      (await DB.getUserByPatreonId(user!.patreonId))?.googleAnalyticsClientId
+    ).toBeUndefined();
+  });
+
+  test("Should not record Patreon webhooks as user logins", async () => {
+    const patreonId = probablyUniqueString();
+    const user = await DB.upsertUser(patreonId, AccountStatus.None, "");
+    const firstLogin = (user as any).mostRecentLogin;
+    const firstPaidLogin = (user as any).mostRecentLoginWithPaidAccount;
+
+    const updatedUser = await DB.upsertUserFromPatreonWebhook(
+      patreonId,
+      AccountStatus.Pledge,
+      ""
+    );
+
+    expect((updatedUser as any).mostRecentLogin).toEqual(firstLogin);
+    expect((updatedUser as any).mostRecentLoginWithPaidAccount).toEqual(
+      firstPaidLogin
+    );
+  });
+
+  test("Should queue and claim a Patreon conversion", async () => {
+    const patreonId = probablyUniqueString();
+    const user = await DB.upsertUser(patreonId, AccountStatus.Pledge, "");
+    const conversion = buildPendingPatreonConversion();
+
+    const queued = await DB.recordPatreonWebhookAccountStatus(
+      patreonId,
+      AccountStatus.Pledge,
+      conversion
+    );
+    expect(queued).toBe(true);
+
+    expect(await DB.claimPendingPatreonConversion(user!._id)).toBeNull();
+
+    await DB.setGoogleAnalyticsClientId(user!._id, "123456.789012");
+    const claimed = await DB.claimPendingPatreonConversion(user!._id);
+    expect(claimed?.patreonConversionTracking?.pendingConversion?.id).toEqual(
+      conversion.id
+    );
+    expect(
+      claimed?.patreonConversionTracking?.pendingConversion?.sendingAtMs
+    ).toBeDefined();
+    expect(await DB.claimPendingPatreonConversion(user!._id)).toBeNull();
+  });
+
+  test("Should not replace a queued conversion from a duplicate webhook", async () => {
+    const patreonId = probablyUniqueString();
+    await DB.upsertUser(patreonId, AccountStatus.Pledge, "");
+    const firstConversion = buildPendingPatreonConversion();
+    const duplicateConversion = buildPendingPatreonConversion();
+
+    expect(
+      await DB.recordPatreonWebhookAccountStatus(
+        patreonId,
+        AccountStatus.Pledge,
+        firstConversion
+      )
+    ).toBe(true);
+    expect(
+      await DB.recordPatreonWebhookAccountStatus(
+        patreonId,
+        AccountStatus.Pledge,
+        duplicateConversion
+      )
+    ).toBe(false);
+
+    const updatedUser = await DB.getUserByPatreonId(patreonId);
+    expect(
+      updatedUser?.patreonConversionTracking?.pendingConversion?.id
+    ).toEqual(firstConversion.id);
+  });
+
+  test("Should release and complete a claimed Patreon conversion", async () => {
+    const patreonId = probablyUniqueString();
+    const user = await DB.upsertUser(patreonId, AccountStatus.Pledge, "");
+    const conversion = buildPendingPatreonConversion();
+    await DB.recordPatreonWebhookAccountStatus(
+      patreonId,
+      AccountStatus.Pledge,
+      conversion
+    );
+    await DB.setGoogleAnalyticsClientId(user!._id, "123456.789012");
+
+    await DB.claimPendingPatreonConversion(user!._id);
+    await DB.releasePendingPatreonConversion(user!._id, conversion.id);
+    expect(await DB.claimPendingPatreonConversion(user!._id)).not.toBeNull();
+
+    expect(
+      await DB.completePendingPatreonConversion(user!._id, conversion.id)
+    ).toBe(true);
+    const updatedUser = await DB.getUserByPatreonId(patreonId);
+    expect(
+      updatedUser?.patreonConversionTracking?.pendingConversion
+    ).toBeUndefined();
+    expect(
+      updatedUser?.patreonConversionTracking?.lastSentConversionId
+    ).toEqual(conversion.id);
+  });
+
+  test("Should send a queued Patreon conversion after client id capture", async () => {
+    process.env.GOOGLE_ANALYTICS_ID = "G-TEST";
+    process.env.GOOGLE_ANALYTICS_API_SECRET = "test-secret";
+    jest.spyOn(console, "log").mockImplementation();
+    const axiosPost = jest.spyOn(axios, "post").mockResolvedValue({});
+    const patreonId = probablyUniqueString();
+    const user = await DB.upsertUser(patreonId, AccountStatus.Pledge, "");
+    const conversion = buildPendingPatreonConversion();
+    await DB.recordPatreonWebhookAccountStatus(
+      patreonId,
+      AccountStatus.Pledge,
+      conversion
+    );
+    await DB.setGoogleAnalyticsClientId(user!._id, "123456.789012");
+
+    expect(await flushPendingPatreonConversion(user!._id)).toBe(true);
+    expect(axiosPost).toHaveBeenCalledWith(
+      expect.stringContaining("measurement_id=G-TEST"),
+      expect.objectContaining({
+        client_id: "123456.789012",
+        events: expect.arrayContaining([
+          expect.objectContaining({
+            name: "close_convert_lead",
+            params: expect.objectContaining({
+              conversion_delivery_delay_ms: expect.any(Number),
+              conversion_id: conversion.id,
+              conversion_observed_at_ms: conversion.observedAtMs
+            })
+          }),
+          expect.objectContaining({
+            name: "patreon_subscription_started",
+            params: expect.objectContaining({
+              conversion_id: conversion.id
+            })
+          })
+        ])
+      }),
+      expect.anything()
+    );
+    expect(
+      (await DB.getUserByPatreonId(patreonId))?.patreonConversionTracking
+        ?.pendingConversion
+    ).toBeUndefined();
+  });
+
+  test("Should retry a queued Patreon conversion after send failure", async () => {
+    process.env.GOOGLE_ANALYTICS_ID = "G-TEST";
+    process.env.GOOGLE_ANALYTICS_API_SECRET = "test-secret";
+    jest.spyOn(console, "log").mockImplementation();
+    jest.spyOn(console, "warn").mockImplementation();
+    jest.spyOn(console, "error").mockImplementation();
+    const axiosPost = jest
+      .spyOn(axios, "post")
+      .mockRejectedValueOnce(new Error("Network error"))
+      .mockResolvedValueOnce({});
+    const patreonId = probablyUniqueString();
+    const user = await DB.upsertUser(patreonId, AccountStatus.Pledge, "");
+    const conversion = buildPendingPatreonConversion();
+    await DB.recordPatreonWebhookAccountStatus(
+      patreonId,
+      AccountStatus.Pledge,
+      conversion
+    );
+    await DB.setGoogleAnalyticsClientId(user!._id, "123456.789012");
+
+    expect(await flushPendingPatreonConversion(user!._id)).toBe(false);
+    expect(
+      (await DB.getUserByPatreonId(patreonId))?.patreonConversionTracking
+        ?.pendingConversion?.sendingAtMs
+    ).toBeUndefined();
+    expect(await flushPendingPatreonConversion(user!._id)).toBe(true);
+    expect(axiosPost).toHaveBeenCalledTimes(2);
   });
 
   test("Should copy playercharacters as persistentcharacters", async () => {
@@ -195,5 +391,52 @@ describe("User Accounts", () => {
         getPatreonWebhookAccountStatus("patreonId", [], "members:pledge:update")
       ).toEqual(AccountStatus.None);
     });
+
+    test("Treats pledge creation as new when OAuth updated status first", () => {
+      expect(
+        getPreviousPatreonWebhookAccountStatus(
+          {
+            accountStatus: AccountStatus.Pledge
+          } as any,
+          "members:pledge:create"
+        )
+      ).toEqual(AccountStatus.None);
+    });
+
+    test("Uses recorded webhook status when available", () => {
+      expect(
+        getPreviousPatreonWebhookAccountStatus(
+          {
+            accountStatus: AccountStatus.Epic,
+            patreonConversionTracking: {
+              webhookAccountStatus: AccountStatus.None
+            }
+          } as any,
+          "members:pledge:update"
+        )
+      ).toEqual(AccountStatus.None);
+    });
   });
 });
+
+function buildPendingPatreonConversion(): PendingPatreonConversion {
+  return {
+    id: probablyUniqueString(),
+    previousAccountStatus: AccountStatus.None,
+    accountStatus: AccountStatus.Pledge,
+    observedAtMs: new Date().getTime(),
+    webhookEvent: "members:pledge:create"
+  };
+}
+
+function restoreEnvironmentVariable(
+  name: string,
+  value: string | undefined
+): void {
+  if (value == undefined) {
+    delete process.env[name];
+    return;
+  }
+
+  process.env[name] = value;
+}

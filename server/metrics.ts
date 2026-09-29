@@ -1,6 +1,7 @@
 import * as express from "express";
 
 import axios from "axios";
+import * as crypto from "crypto";
 import { MongoClient } from "mongodb";
 import * as DB from "./dbconnection";
 
@@ -21,6 +22,10 @@ type ServerEventMeta = {
 type GoogleAnalyticsEvent = {
   name: ServerMetricEvent;
   params?: Record<string, any>;
+};
+
+type GoogleAnalyticsEventBatch = {
+  events: GoogleAnalyticsEvent[];
   clientId?: string;
   userId?: string;
 };
@@ -101,22 +106,35 @@ export function configureMetricsRoutes(app: express.Application) {
       return res.status(400).send("Invalid Google Analytics client id.");
     }
 
-    await DB.setGoogleAnalyticsClientId(
+    const clientIdChanged = await DB.setGoogleAnalyticsClientId(
       session.userId,
       googleAnalyticsClientId
     );
+    await flushPendingPatreonConversion(session.userId);
 
-    await recordServerEvent(
-      ServerMetricEvent.GoogleAnalyticsClientIdRecorded,
-      {},
-      {
-        sessionId: session.id,
-        userId: session.userId,
-        ipAddress: req.ip
-      }
-    );
+    if (clientIdChanged) {
+      await recordServerEvent(
+        ServerMetricEvent.GoogleAnalyticsClientIdRecorded,
+        {},
+        {
+          sessionId: session.id,
+          userId: session.userId,
+          ipAddress: req.ip
+        }
+      );
+    }
 
     return res.sendStatus(202);
+  });
+
+  app.delete("/recordGoogleAnalyticsClientId", async (req: Req, res: Res) => {
+    const session = req.session;
+    if (session === undefined || !session.userId) {
+      return res.sendStatus(401);
+    }
+
+    await DB.clearGoogleAnalyticsClientId(session.userId);
+    return res.sendStatus(204);
   });
 }
 
@@ -148,12 +166,22 @@ export async function recordServerEvent(
 }
 
 export async function trackGoogleAnalyticsEvent(
-  event: GoogleAnalyticsEvent
-): Promise<void> {
+  event: GoogleAnalyticsEvent & Omit<GoogleAnalyticsEventBatch, "events">
+): Promise<boolean> {
+  return trackGoogleAnalyticsEvents({
+    clientId: event.clientId,
+    userId: event.userId,
+    events: [{ name: event.name, params: event.params }]
+  });
+}
+
+export async function trackGoogleAnalyticsEvents(
+  eventBatch: GoogleAnalyticsEventBatch
+): Promise<boolean> {
   const measurementId = process.env.GOOGLE_ANALYTICS_ID;
   const apiSecret = process.env.GOOGLE_ANALYTICS_API_SECRET;
-  if (!measurementId || !apiSecret || !event.clientId) {
-    return;
+  if (!measurementId || !apiSecret || !eventBatch.clientId) {
+    return false;
   }
 
   const endpoint =
@@ -168,22 +196,83 @@ export async function trackGoogleAnalyticsEvent(
     await axios.post(
       url,
       {
-        client_id: event.clientId,
-        user_id: event.userId,
-        events: [
-          {
-            name: event.name,
-            params: event.params || {}
-          }
-        ]
+        client_id: eventBatch.clientId,
+        user_id: eventBatch.userId,
+        events: eventBatch.events.map(event => ({
+          name: event.name,
+          params: event.params || {}
+        }))
       },
       {
         headers: { "content-type": "application/json" }
       }
     );
+    return true;
   } catch (error) {
     console.error("Failed to send Google Analytics event", error);
+    return false;
   }
+}
+
+export async function flushPendingPatreonConversion(
+  userId: string | import("mongodb").ObjectId
+): Promise<boolean> {
+  const user = await DB.claimPendingPatreonConversion(userId);
+  const conversion = user?.patreonConversionTracking?.pendingConversion;
+  if (!user || !conversion || !user.googleAnalyticsClientId) {
+    return false;
+  }
+
+  const patreonIdHash = hashPatreonId(user.patreonId);
+  const deliveryDelayMs = new Date().getTime() - conversion.observedAtMs;
+  const params = {
+    account_status: conversion.accountStatus,
+    conversion_delivery_delay_ms: deliveryDelayMs,
+    conversion_id: conversion.id,
+    conversion_observed_at_ms: conversion.observedAtMs,
+    lead_source: ServerMetricLeadSource.PatreonWebhook,
+    patreon_event: conversion.webhookEvent,
+    patreon_status_change: "started",
+    previous_account_status: conversion.previousAccountStatus,
+    items: [getPatreonAccountStatusItem(conversion.accountStatus)]
+  };
+  const sent = await trackGoogleAnalyticsEvents({
+    clientId: user.googleAnalyticsClientId,
+    userId: patreonIdHash,
+    events: [
+      { name: ServerMetricEvent.PatreonSubscriptionStarted, params },
+      { name: ServerMetricEvent.CloseConvertLead, params }
+    ]
+  });
+
+  if (sent) {
+    await DB.completePendingPatreonConversion(user._id, conversion.id);
+    console.log(
+      `Sent Patreon conversion ${conversion.id} for ${patreonIdHash}`
+    );
+  } else {
+    await DB.releasePendingPatreonConversion(user._id, conversion.id);
+    console.warn(
+      `Released Patreon conversion ${conversion.id} for ${patreonIdHash}`
+    );
+  }
+
+  return sent;
+}
+
+function getPatreonAccountStatusItem(accountStatus: string) {
+  return {
+    item_id: `patreon_${accountStatus}`,
+    item_name: `Patreon ${accountStatus}`
+  };
+}
+
+function hashPatreonId(patreonId: string): string {
+  return crypto
+    .createHash("sha256")
+    .update(patreonId)
+    .digest("hex")
+    .substring(0, 36);
 }
 
 function isValidGoogleAnalyticsClientId(clientId: any): clientId is string {
