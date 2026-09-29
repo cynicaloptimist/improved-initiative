@@ -6,7 +6,7 @@ import { PersistentCharacter } from "../common/PersistentCharacter";
 import { SavedEncounter } from "../common/SavedEncounter";
 import { Spell } from "../common/Spell";
 import { StatBlock } from "../common/StatBlock";
-import { AccountStatus, User } from "./user";
+import { AccountStatus, PendingPatreonConversion, User } from "./user";
 
 let mongoClient: mongo.MongoClient;
 
@@ -33,15 +33,40 @@ export async function upsertUser(
   accountStatus: AccountStatus,
   emailAddress: string
 ): Promise<mongo.WithId<User> | null> {
+  return upsertUserInternal(patreonId, accountStatus, emailAddress, true);
+}
+
+export async function upsertUserFromPatreonWebhook(
+  patreonId: string,
+  accountStatus: AccountStatus,
+  emailAddress: string
+): Promise<mongo.WithId<User> | null> {
+  return upsertUserInternal(patreonId, accountStatus, emailAddress, false);
+}
+
+async function upsertUserInternal(
+  patreonId: string,
+  accountStatus: AccountStatus,
+  emailAddress: string,
+  recordLogin: boolean
+): Promise<mongo.WithId<User> | null> {
   if (!mongoClient) {
     console.error("No mongo client initialized");
     throw "No mongo client initialized";
   }
 
-  const currentDate = new Date();
-  const mostRecentLogin = currentDate;
-  const mostRecentLoginWithPaidAccount =
-    accountStatus !== AccountStatus.None ? currentDate : null;
+  const userUpdates: Record<string, any> = {
+    patreonId,
+    accountStatus,
+    emailAddress
+  };
+  if (recordLogin) {
+    const currentDate = new Date();
+    userUpdates.mostRecentLogin = currentDate;
+    if (accountStatus !== AccountStatus.None) {
+      userUpdates.mostRecentLoginWithPaidAccount = currentDate;
+    }
+  }
 
   const db = mongoClient.db();
   const users = await db.collection<User>("users");
@@ -50,13 +75,7 @@ export async function upsertUser(
       patreonId
     },
     {
-      $set: {
-        patreonId,
-        accountStatus,
-        emailAddress,
-        mostRecentLogin,
-        mostRecentLoginWithPaidAccount
-      },
+      $set: userUpdates,
       $setOnInsert: {
         statblocks: {},
         persistentcharacters: {},
@@ -89,7 +108,7 @@ export async function getUserByPatreonId(
 export async function setGoogleAnalyticsClientId(
   userId: string | mongo.ObjectId,
   googleAnalyticsClientId: string
-): Promise<number> {
+): Promise<boolean> {
   if (!mongoClient) {
     throw "No mongo client initialized";
   }
@@ -109,7 +128,176 @@ export async function setGoogleAnalyticsClientId(
     }
   );
 
-  return result.modifiedCount;
+  return result.modifiedCount > 0;
+}
+
+export async function clearGoogleAnalyticsClientId(
+  userId: string | mongo.ObjectId
+): Promise<boolean> {
+  if (!mongoClient) {
+    throw "No mongo client initialized";
+  }
+
+  if (typeof userId === "string") {
+    userId = new mongo.ObjectId(userId);
+  }
+
+  const users = mongoClient.db().collection<User>("users");
+  const result = await users.updateOne(
+    { _id: userId },
+    { $unset: { googleAnalyticsClientId: "" } }
+  );
+
+  return result.modifiedCount > 0;
+}
+
+export async function recordPatreonWebhookAccountStatus(
+  patreonId: string,
+  accountStatus: AccountStatus,
+  pendingConversion?: PendingPatreonConversion
+): Promise<boolean> {
+  if (!mongoClient) {
+    throw "No mongo client initialized";
+  }
+
+  const users = mongoClient.db().collection<User>("users");
+  if (!pendingConversion) {
+    await users.updateOne(
+      { patreonId },
+      {
+        $set: {
+          "patreonConversionTracking.webhookAccountStatus": accountStatus
+        }
+      }
+    );
+    return false;
+  }
+
+  const result = await users.updateOne(
+    {
+      patreonId,
+      $or: [
+        {
+          "patreonConversionTracking.webhookAccountStatus": {
+            $exists: false
+          }
+        },
+        {
+          "patreonConversionTracking.webhookAccountStatus": AccountStatus.None
+        }
+      ]
+    },
+    {
+      $set: {
+        "patreonConversionTracking.webhookAccountStatus": accountStatus,
+        "patreonConversionTracking.pendingConversion": pendingConversion
+      }
+    }
+  );
+
+  if (result.matchedCount > 0) {
+    return true;
+  }
+
+  await users.updateOne(
+    { patreonId },
+    {
+      $set: {
+        "patreonConversionTracking.webhookAccountStatus": accountStatus
+      }
+    }
+  );
+  return false;
+}
+
+export async function claimPendingPatreonConversion(
+  userId: string | mongo.ObjectId
+): Promise<mongo.WithId<User> | null> {
+  if (!mongoClient) {
+    throw "No mongo client initialized";
+  }
+
+  if (typeof userId === "string") {
+    userId = new mongo.ObjectId(userId);
+  }
+
+  const currentTime = new Date().getTime();
+  const staleClaimTime = currentTime - 5 * 60 * 1000;
+  const users = mongoClient.db().collection<User>("users");
+  const result = await users.findOneAndUpdate(
+    {
+      _id: userId,
+      googleAnalyticsClientId: { $exists: true, $ne: "" },
+      "patreonConversionTracking.pendingConversion": { $exists: true },
+      $or: [
+        {
+          "patreonConversionTracking.pendingConversion.sendingAtMs": {
+            $exists: false
+          }
+        },
+        {
+          "patreonConversionTracking.pendingConversion.sendingAtMs": {
+            $lt: staleClaimTime
+          }
+        }
+      ]
+    } as mongo.Filter<User>,
+    {
+      $set: {
+        "patreonConversionTracking.pendingConversion.sendingAtMs": currentTime
+      }
+    },
+    { returnDocument: "after" }
+  );
+
+  return result.value;
+}
+
+export async function completePendingPatreonConversion(
+  userId: mongo.ObjectId,
+  conversionId: string
+): Promise<boolean> {
+  if (!mongoClient) {
+    throw "No mongo client initialized";
+  }
+
+  const users = mongoClient.db().collection<User>("users");
+  const result = await users.updateOne(
+    {
+      _id: userId,
+      "patreonConversionTracking.pendingConversion.id": conversionId
+    } as mongo.Filter<User>,
+    {
+      $set: {
+        "patreonConversionTracking.lastSentConversionId": conversionId
+      },
+      $unset: { "patreonConversionTracking.pendingConversion": "" }
+    }
+  );
+
+  return result.modifiedCount > 0;
+}
+
+export async function releasePendingPatreonConversion(
+  userId: mongo.ObjectId,
+  conversionId: string
+): Promise<void> {
+  if (!mongoClient) {
+    throw "No mongo client initialized";
+  }
+
+  const users = mongoClient.db().collection<User>("users");
+  await users.updateOne(
+    {
+      _id: userId,
+      "patreonConversionTracking.pendingConversion.id": conversionId
+    } as mongo.Filter<User>,
+    {
+      $unset: {
+        "patreonConversionTracking.pendingConversion.sendingAtMs": ""
+      }
+    }
+  );
 }
 
 export async function getAccount(

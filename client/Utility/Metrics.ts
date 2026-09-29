@@ -120,10 +120,11 @@ export class Metrics {
           method: loginMethod
         });
       }
-      Metrics.RecordGoogleAnalyticsClientId();
       queryParams.delete("login");
       window.history.replaceState(null, "", window.location.pathname);
     }
+
+    Metrics.SyncGoogleAnalyticsConsent();
   }
 
   public static TrackPatreonSignupIntent(
@@ -313,6 +314,30 @@ export class Metrics {
         }
       );
     } catch (e) {}
+  }
+
+  public static ClearGoogleAnalyticsClientId(): void {
+    if (!env.IsLoggedIn) {
+      return;
+    }
+
+    axios.delete("/recordGoogleAnalyticsClientId");
+  }
+
+  public static SyncGoogleAnalyticsConsent(): void {
+    if (!env.IsLoggedIn) {
+      return;
+    }
+
+    const allowTracking = LegacySynchronousLocalStore.Load(
+      LegacySynchronousLocalStore.User,
+      "AllowTracking"
+    );
+    if (allowTracking === true) {
+      Metrics.RecordGoogleAnalyticsClientId();
+    } else if (allowTracking === false) {
+      Metrics.ClearGoogleAnalyticsClientId();
+    }
   }
 
   private static getLocalMeta() {

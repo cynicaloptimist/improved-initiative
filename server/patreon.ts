@@ -8,6 +8,7 @@ import * as querystring from "querystring";
 
 import * as DB from "./dbconnection";
 import {
+  flushPendingPatreonConversion,
   recordServerEvent,
   ServerMetricEvent,
   ServerMetricLeadSource,
@@ -16,7 +17,7 @@ import {
 
 import { ParseJSONOrDefault } from "../common/Toolbox";
 import thanks from "../thanks";
-import { AccountStatus } from "./user";
+import { AccountStatus, PendingPatreonConversion, User } from "./user";
 import { fetchRemoteText } from "./fetchRemoteText";
 
 type Req = Express.Request & express.Request & { rawBody: string };
@@ -331,24 +332,94 @@ async function handleWebhook(req: Req, res: Res) {
       webhookEvent
     );
     const previousUser = await DB.getUserByPatreonId(patreonId);
-    const previousAccountStatus =
-      previousUser?.accountStatus || AccountStatus.None;
+    const previousAccountStatus = getPreviousPatreonWebhookAccountStatus(
+      previousUser,
+      webhookEvent
+    );
+    const statusChange = getPatreonAccountStatusChange(
+      previousAccountStatus,
+      userAccountLevel
+    );
+    const pendingConversion =
+      statusChange == "started"
+        ? buildPendingPatreonConversion(
+            previousAccountStatus,
+            userAccountLevel,
+            webhookEvent
+          )
+        : undefined;
 
     console.log(
       `Webhook: Updating account level for ${userEmail} to ${userAccountLevel}`
     );
-    await DB.upsertUser(patreonId, userAccountLevel, userEmail);
-    await recordPatreonAccountStatusChange(
+    const user = await DB.upsertUserFromPatreonWebhook(
       patreonId,
-      previousUser?.googleAnalyticsClientId,
-      previousAccountStatus,
       userAccountLevel,
-      webhookEvent
+      userEmail
     );
+    if (!user) {
+      throw "Failed to update user from Patreon webhook";
+    }
+
+    const conversionQueued = await DB.recordPatreonWebhookAccountStatus(
+      patreonId,
+      userAccountLevel,
+      pendingConversion
+    );
+    if (conversionQueued && pendingConversion) {
+      const clientIdState = previousUser?.googleAnalyticsClientId
+        ? "ready"
+        : "awaiting client id";
+      console.log(
+        `Queued Patreon conversion ${pendingConversion.id} for ` +
+          `${hashPatreonId(patreonId)} (${clientIdState})`
+      );
+    }
+    if (statusChange != "started" || conversionQueued) {
+      await recordPatreonAccountStatusChange(
+        patreonId,
+        previousUser?.googleAnalyticsClientId,
+        previousAccountStatus,
+        userAccountLevel,
+        webhookEvent
+      );
+    }
+    await flushPendingPatreonConversion(user._id);
     return res.sendStatus(201);
   } catch (e) {
     return res.status(500).send(e);
   }
+}
+
+export function getPreviousPatreonWebhookAccountStatus(
+  user: User | null,
+  webhookEvent: PatreonWebhookTrigger
+): AccountStatus {
+  const webhookAccountStatus =
+    user?.patreonConversionTracking?.webhookAccountStatus;
+  if (webhookAccountStatus != undefined) {
+    return webhookAccountStatus;
+  }
+
+  if (webhookEvent == "members:pledge:create") {
+    return AccountStatus.None;
+  }
+
+  return user?.accountStatus || AccountStatus.None;
+}
+
+function buildPendingPatreonConversion(
+  previousAccountStatus: AccountStatus,
+  accountStatus: AccountStatus,
+  webhookEvent: PatreonWebhookTrigger
+): PendingPatreonConversion {
+  return {
+    id: crypto.randomBytes(16).toString("hex"),
+    previousAccountStatus,
+    accountStatus,
+    observedAtMs: new Date().getTime(),
+    webhookEvent
+  };
 }
 
 function isSupportedPatreonWebhookTrigger(
@@ -443,6 +514,10 @@ async function recordPatreonAccountStatusChange(
     }
   );
 
+  if (statusChange == "started") {
+    return;
+  }
+
   const commonGoogleAnalyticsParams = {
     lead_source: ServerMetricLeadSource.PatreonWebhook,
     previous_account_status: previousAccountStatus,
@@ -459,17 +534,6 @@ async function recordPatreonAccountStatusChange(
 
   await trackGoogleAnalyticsEvent({
     name: subscriptionEventByStatusChange[statusChange],
-    clientId: googleAnalyticsClientId,
-    userId: hashPatreonId(patreonId),
-    params: commonGoogleAnalyticsParams
-  });
-
-  if (statusChange != "started") {
-    return;
-  }
-
-  await trackGoogleAnalyticsEvent({
-    name: ServerMetricEvent.CloseConvertLead,
     clientId: googleAnalyticsClientId,
     userId: hashPatreonId(patreonId),
     params: commonGoogleAnalyticsParams
