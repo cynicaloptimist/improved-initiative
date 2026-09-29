@@ -1,4 +1,4 @@
-import React = require("react");
+import * as React from "react";
 import { Selection } from "./useSelection";
 import { Listing } from "../Listing";
 

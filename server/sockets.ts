@@ -13,6 +13,8 @@ import { EncounterState } from "../common/EncounterState";
 import { PlayerViewCombatantState } from "../common/PlayerViewCombatantState";
 import { ValidateEncounterId } from "../common/ValidateEncounterId";
 
+type Session = Express.Request["session"];
+
 export default async function (
   io: SocketIO.Server,
   session: express.RequestHandler,
@@ -41,7 +43,7 @@ export default async function (
         socket.disconnect(true);
         return;
       }
-      const activeSession: Express.Session = socketSession;
+      const activeSession: Session = socketSession;
 
       function joinEncounter(id: string) {
         activeSession.encounterId = id;
@@ -96,7 +98,7 @@ export default async function (
           const idAvailable = await playerViews.IdAvailable(id);
           if (idAvailable) {
             const oldId = activeSession.encounterId;
-            playerViews.Destroy(oldId);
+            playerViews.Destroy(oldId!);
             joinEncounter(id);
             return callback(true);
           } else {

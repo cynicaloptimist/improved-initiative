@@ -32,10 +32,11 @@ const googleAnalyticsId = process.env.GOOGLE_ANALYTICS_ID || "";
 
 export type Req = Express.Request & express.Request;
 export type Res = Express.Response & express.Response;
+type Session = Express.Request["session"];
 
 const appVersion = require("../package.json").version;
 
-const getClientOptions = (session: Express.Session) => {
+const getClientOptions = (session: Session) => {
   const encounterId = session.encounterId || probablyUniqueString();
   const patreonLoginUrl =
     "http://www.patreon.com/oauth2/authorize" +
@@ -126,7 +127,7 @@ export default async function (
     if (session === undefined) {
       throw "Session is not available";
     }
-    session.encounterId = req.params.id;
+    session.encounterId = req.params.id as string;
     const urlObject = new URL(req.url, baseUrl);
     const queryString = urlObject.search;
 
@@ -155,12 +156,12 @@ export default async function (
       throw "Session is not available";
     }
 
-    session.encounterId = req.params.id;
+    session.encounterId = req.params.id as string;
     res.render("playerview", getClientOptions(session));
   });
 
   app.get("/playerviews/:id", async (req: Req, res: Res) => {
-    const playerView = await playerViews.Get(req.params.id);
+    const playerView = await playerViews.Get(req.params.id as string);
     res.json(playerView);
   });
 
@@ -181,7 +182,7 @@ export default async function (
   return configureOpen5eContentPromise;
 }
 
-async function setupLocalDefaultUser(session: Express.Session) {
+async function setupLocalDefaultUser(session: Session) {
   let accountStatus = AccountStatus.None;
   if (defaultAccountLevel === "accountsync") {
     session.hasStorage = true;
@@ -216,7 +217,7 @@ async function setupLocalDefaultUser(session: Express.Session) {
   return;
 }
 
-async function updateSession(session: Express.Session) {
+async function updateSession(session: Session) {
   if (session.userId) {
     const account = await getAccount(session.userId);
     if (account) {

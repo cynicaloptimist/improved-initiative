@@ -1,7 +1,7 @@
 import * as React from "react";
+import * as Mousetrap from "mousetrap";
 import { CommandContext } from "./CommandContext";
 import { Button } from "../Components/Button";
-import Mousetrap = require("mousetrap");
 import { SettingsContext } from "../Settings/SettingsContext";
 
 export const RestoreCombatants = () => {

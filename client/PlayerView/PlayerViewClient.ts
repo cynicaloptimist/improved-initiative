@@ -1,9 +1,9 @@
 import { Socket } from "socket.io-client";
+import * as _ from "lodash";
 import { CombatStats } from "../../common/CombatStats";
 import { EncounterState } from "../../common/EncounterState";
 import { PlayerViewCombatantState } from "../../common/PlayerViewCombatantState";
 import { PlayerViewSettings } from "../../common/PlayerViewSettings";
-import _ = require("lodash");
 
 export class PlayerViewClient {
   constructor(private socket: Socket) {}

@@ -3,7 +3,7 @@ module.exports = {
     "^.+\\.tsx?$": [
       "ts-jest",
       {
-        tsconfig: "client/tsconfig.json"
+        tsconfig: "server/tsconfig.json"
       }
     ],
     "^.+\\.md?$": "markdown-loader-jest"

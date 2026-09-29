@@ -1,4 +1,4 @@
-import _ = require("lodash");
+import * as _ from "lodash";
 import { Listable } from "../../common/Listable";
 import { Listing, ListingOrigin } from "./Listing";
 

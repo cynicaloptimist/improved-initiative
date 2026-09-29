@@ -18,7 +18,7 @@ export function configureBasicRulesContent(app: express.Application) {
   });
 
   app.get(statBlockLibrary.Route() + ":id", (req: Req, res: Res) => {
-    res.json(statBlockLibrary.GetById(req.params.id));
+    res.json(statBlockLibrary.GetById(req.params.id as string));
   });
 
   const spellLibrary = Library.FromFile<Spell>(
@@ -33,6 +33,6 @@ export function configureBasicRulesContent(app: express.Application) {
   });
 
   app.get(spellLibrary.Route() + ":id", (req: Req, res: Res) => {
-    res.json(spellLibrary.GetById(req.params.id));
+    res.json(spellLibrary.GetById(req.params.id as string));
   });
 }

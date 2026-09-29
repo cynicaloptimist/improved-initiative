@@ -10,15 +10,25 @@ import { updateSessionAccountFeatures } from "./patreon";
 
 type Req = Express.Request & express.Request;
 type Res = Express.Response & express.Response;
-
-const verifyStorage = (
-  req: Express.Request
-): req is { session: Express.Session } => {
-  return !!req.session?.userId && req.session?.hasStorage;
+type StorageRequest = express.Request & {
+  session: express.Request["session"] & {
+    userId: NonNullable<express.Request["session"]["userId"]>;
+    hasStorage: true;
+  };
 };
 
-const parsePossiblyMalformedIdFromParams = params => {
+const verifyStorage = (req: express.Request): req is StorageRequest => {
+  return Boolean(req.session?.userId && req.session?.hasStorage);
+};
+
+const parsePossiblyMalformedIdFromParams = (
+  params: Record<string, string | string[]>
+): string => {
   let id = params.id;
+  if (Array.isArray(id)) {
+    return id.join("/");
+  }
+
   for (let i = 0; params[i] !== undefined; i++) {
     id += params[i];
   }
@@ -103,7 +113,7 @@ function configureEntityRoute<T extends Listable>(
   app: express.Application,
   route: DB.EntityPath
 ) {
-  app.get(`/my/${route}/:id*`, (req: Req, res: Res) => {
+  app.get(`/my/${route}/*id`, (req: Req, res: Res) => {
     if (!verifyStorage(req)) {
       return res.sendStatus(403);
     }
@@ -157,7 +167,7 @@ function configureEntityRoute<T extends Listable>(
     }
   });
 
-  app.delete(`/my/${route}/:id*`, (req: Req, res: Res) => {
+  app.delete(`/my/${route}/*id`, (req: Req, res: Res) => {
     if (!verifyStorage(req)) {
       return res.sendStatus(403);
     }

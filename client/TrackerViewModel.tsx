@@ -2,7 +2,6 @@ import * as ko from "knockout";
 import * as React from "react";
 import * as SocketIOClient from "socket.io-client";
 
-import * as compression from "json-url";
 import * as lzString from "lz-string";
 import { TagState } from "../common/CombatantState";
 import { PersistentCharacter } from "../common/PersistentCharacter";
@@ -22,6 +21,7 @@ import { Encounter } from "./Encounter/Encounter";
 import { UpdateLegacyEncounterState } from "./Encounter/UpdateLegacySavedEncounter";
 import { env } from "./Environment";
 import { Libraries, LibraryType } from "./Library/Libraries";
+import { DecompressLegacyUrlPayload } from "./LegacyUrlCompression";
 import { PatreonPost } from "../common/PatreonPost";
 import { PlayerViewClient } from "./PlayerView/PlayerViewClient";
 import { DefaultRules } from "./Rules/Rules";
@@ -39,8 +39,6 @@ import { EventLog } from "./Widgets/EventLog";
 import { SpellEditorProps } from "./StatBlockEditor/SpellEditor";
 import axios from "axios";
 import { Spell } from "../common/Spell";
-
-const codec = compression("lzma");
 
 export class TrackerViewModel {
   private rules = new DefaultRules();
@@ -296,7 +294,7 @@ export class TrackerViewModel {
 
     let json = "";
     if (compressedJSONv1) {
-      json = await codec.decompress(compressedJSONv1);
+      json = await DecompressLegacyUrlPayload(compressedJSONv1);
     }
     if (compressedJSONv2) {
       json = lzString.decompressFromEncodedURIComponent(compressedJSONv2);
