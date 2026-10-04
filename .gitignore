@@ -23,3 +23,4 @@ public/webfonts/*
 .codex-runtime/
 playwright-report/
 test-results/
+tmp

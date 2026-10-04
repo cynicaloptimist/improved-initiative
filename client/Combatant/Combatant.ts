@@ -10,7 +10,6 @@ import { NotifyTutorialOfAction } from "../Tutorial/NotifyTutorialOfAction";
 import { Metrics } from "../Utility/Metrics";
 import { CombatTimer } from "../Widgets/CombatTimer";
 import { Tag } from "./Tag";
-import { RollResult } from "../Rules/RollResult";
 import { AbilityCheckResult } from "../Rules/Rules";
 import { AutoGroupInitiativeOption } from "../../common/Settings";
 

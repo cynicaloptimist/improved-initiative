@@ -256,14 +256,23 @@
 .p-roll-dice {
   flex-flow: row;
   flex-grow: 1;
+
   div:first-child {
     flex-flow: row;
     flex-grow: 1;
     align-items: center;
   }
+
   input {
     width: 6rem;
   }
+}
+
+.p-roll-dice__notation-tip {
+  margin: @small-spacer;
+  color: var(--text-faded);
+  font-size: 0.8rem;
+  white-space: nowrap;
 }
 
 .prompt--dice-roll-result {
@@ -272,6 +281,7 @@
 
 .p-roll-dice-result {
   flex-direction: row;
+  flex-wrap: wrap;
   flex-grow: 1;
   align-items: flex-start;
   gap: @large-spacer;
@@ -334,14 +344,109 @@
   background-color: color-mix(in srgb, var(--red) 10%, var(--input-bg));
 }
 
+.p-roll-dice-result__roll--kept {
+  border-width: 2px;
+  border-color: var(--red);
+}
+
+.p-roll-dice-result--advantage .p-roll-dice-result__roll--kept {
+  border-color: var(--green);
+}
+
+.p-roll-dice-result__roll--discarded {
+  opacity: 0.45;
+  text-decoration: line-through;
+}
+
 .p-roll-dice-result__calculation {
   font-weight: bold;
   margin-left: @small-spacer;
   white-space: nowrap;
 }
 
-button.p-roll-dice-result__reroll {
+.p-roll-dice-result__actions {
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: @small-spacer;
+  max-width: 18rem;
   margin-left: auto;
+}
+
+button.c-roll-mode-button {
+  isolation: isolate;
+  overflow: hidden;
+  border-color: currentColor;
+  font-size: 1rem;
+  font-weight: bold;
+  color: var(--red);
+
+  .fas {
+    position: absolute;
+    z-index: -1;
+    top: 52%;
+    left: 50%;
+    margin: 0;
+    opacity: 0.2;
+    font-size: 2.05rem;
+    transform: translate(-50%, -50%);
+  }
+
+  &:hover .fas {
+    opacity: .3;
+  }
+}
+
+button.c-roll-mode-button--advantage,
+button.c-roll-mode-button--advantage:hover {
+    color: var(--green);
+    border-color: var(--green);
+    outline-color: var(--green);
+}
+
+button.c-roll-mode-button--advantage:hover {
+  background-color: color-mix(in srgb, var(--white), var(--green) 10%);
+}
+
+button.c-roll-mode-button--disadvantage:hover {
+  background-color: color-mix(in srgb, var(--white), var(--red) 10%);
+}
+
+.dark-mode {
+  button.c-roll-mode-button {
+    color: var(--white)
+  }
+
+  button.c-roll-mode-button:hover {
+    background-color: var(--hover-white);
+  }
+
+  button.c-roll-mode-button,
+  button.c-roll-mode-button:hover {
+    border-color: var(--red);
+  }
+
+  button.c-roll-mode-button--advantage,
+  button.c-roll-mode-button--advantage:hover, {
+    border-color: var(--green);
+  }
+
+  button.c-roll-mode-button .fas {
+    color: var(--dark-red);
+    opacity: 0.6;
+  }
+
+  button.c-roll-mode-button:hover .fas {
+    color: var(--red);
+  }
+
+  button.c-roll-mode-button--advantage .fas {
+    color: var(--dark-green);
+  }
+
+  button.c-roll-mode-button--advantage:hover .fas {
+    color: var(--green);
+  }
 }
 
 .p-standard-prompt.p-quick-add {

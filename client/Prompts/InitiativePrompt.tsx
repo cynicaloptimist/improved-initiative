@@ -60,7 +60,9 @@ function InitiativeSide(props: {
       ) : (
         <div className="roll-initiative__buttons">
           <Button
-            fontAwesomeIcon="star"
+            additionalClassNames="c-roll-mode-button c-roll-mode-button--advantage"
+            fontAwesomeIcon="dice-d20"
+            text="A"
             tooltip={`Reroll ${props.sideLabel} initiative with advantage`}
             onClick={() => {
               rerollInitiative(
@@ -73,7 +75,9 @@ function InitiativeSide(props: {
             }}
           />
           <Button
-            fontAwesomeIcon="exclamation-triangle"
+            additionalClassNames="c-roll-mode-button c-roll-mode-button--disadvantage"
+            fontAwesomeIcon="dice-d20"
+            text="D"
             tooltip={`Reroll ${props.sideLabel} initiative with disadvantage`}
             onClick={() => {
               rerollInitiative(

@@ -7,8 +7,8 @@ import { Combatant } from "../Combatant/Combatant";
 import { CombatantDetails } from "../Combatant/CombatantDetails";
 import { CombatantViewModel } from "../Combatant/CombatantViewModel";
 import { MultipleCombatantDetails } from "../Combatant/MultipleCombatantDetails";
-import { Dice } from "../Rules/Dice";
-import { RollResult } from "../Rules/RollResult";
+import { DiceRoll } from "../Rules/Dice";
+import { rollExpression, toExpression } from "../Rules/DiceExpression";
 import { CurrentSettings } from "../Settings/Settings";
 import { TrackerViewModel } from "../TrackerViewModel";
 import { Metrics } from "../Utility/Metrics";
@@ -19,7 +19,7 @@ import { AcceptTagPrompt } from "../Prompts/AcceptTagPrompt";
 import { ApplyDamagePrompt } from "../Prompts/ApplyDamagePrompt";
 import { ApplyHealingPrompt } from "../Prompts/ApplyHealingPrompt";
 import { ConcentrationPrompt } from "../Prompts/ConcentrationPrompt";
-import { ShowDiceRollResultPrompt } from "../Prompts/RollDicePrompt";
+import { DiceRollResultPrompt } from "../Prompts/dice/RollResultsPrompt";
 import { TagPrompt } from "../Prompts/TagPrompt";
 import { UpdateNotesPrompt } from "../Prompts/UpdateNotesPrompt";
 import { ApplyTemporaryHPPrompt } from "../Prompts/ApplyTemporaryHPPrompt";
@@ -34,7 +34,7 @@ interface PendingLinkInitiative {
 
 export class CombatantCommander {
   private selectedCombatantIds = ko.observableArray<string>([]);
-  private latestRoll: RollResult;
+  private latestRoll: DiceRoll;
 
   constructor(private tracker: TrackerViewModel) {
     this.Commands = BuildCombatantCommandList(this);
@@ -510,25 +510,20 @@ export class CombatantCommander {
     this.tracker.PromptQueue.Add(prompt);
   };
 
-  private handleDiceRoll = (diceExpression: string): RollResult => {
-    const diceRoll = Dice.RollDiceExpression(diceExpression);
-    this.latestRoll = diceRoll;
-
+  private handleDiceRoll = (roll: DiceRoll): void => {
+    this.latestRoll = roll;
     Metrics.TrackEvent(Metrics.Event.DiceRolled, {
-      expression: diceExpression,
-      result: diceRoll.ResultString
+      expression: toExpression(roll),
+      result: roll.ToResultString()
     });
-
-    return diceRoll;
   };
 
-  public RollDice = (diceExpression: string) => {
-    const prompt = ShowDiceRollResultPrompt(
-      this.handleDiceRoll(diceExpression),
-      () => this.handleDiceRoll(diceExpression)
+  public RollDice = (expression: string) => {
+    const roll = rollExpression(expression);
+    this.handleDiceRoll(roll);
+    this.tracker.PromptQueue.Add(
+      DiceRollResultPrompt(roll, this.handleDiceRoll)
     );
-
-    this.tracker.PromptQueue.Add(prompt);
   };
 
   public Duplicate = () => {
