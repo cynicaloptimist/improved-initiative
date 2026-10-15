@@ -85,7 +85,7 @@
     "lz-string": "^1.5.0",
     "lzma": "^2.3.2",
     "moment": "^2.29.4",
-    "msgpack5": "^4.5.1",
+    "msgpack5": "^6.1.0",
     "mongodb": "^4.17.1",
     "mongodb-memory-server": "^11.2.0",
     "mousetrap": "^1.6.5",
